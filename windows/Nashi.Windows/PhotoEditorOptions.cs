@@ -97,7 +97,7 @@ public sealed partial class ToolEditor
     private void SetPhotoPreview(BitmapSource result){drawing.Width=result.PixelWidth;drawing.Height=result.PixelHeight;if(drawing.Children[0] is Image image){image.Source=result;image.Width=result.PixelWidth;image.Height=result.PixelHeight;}}
     private async Task DetectPhoto(bool text,bool faces)
     {
-        if(bitmap is null)return;try{var regions=await NativePdf.DetectAsync(bitmap,text,faces);foreach(var r in regions){photoRegions.Add(r);var shape=new Rectangle{Width=r.Width,Height=r.Height,Fill=Brushes.Black,Stroke=Brushes.Gold,StrokeThickness=2,IsHitTestVisible=false};Canvas.SetLeft(shape,r.X);Canvas.SetTop(shape,r.Y);drawing.Children.Add(shape);}if(regions.Length==0)MessageBox.Show(this,"No matching regions were detected. You can still draw areas by hand.","Redact Photo");}catch(Exception error){MessageBox.Show(this,error.Message,"Detection unavailable");}
+        if(bitmap is null)return;try{var regions=await NativePdf.DetectAsync(bitmap,text,faces);foreach(var r in regions){photoRegions.Add(r);var shape=new Rectangle{Width=r.Width,Height=r.Height,Fill=Brushes.Black,Stroke=Brushes.Gold,StrokeThickness=2,IsHitTestVisible=false};Canvas.SetLeft(shape,r.X);Canvas.SetTop(shape,r.Y);drawing.Children.Add(shape);}if(regions.Length==0)MessageBox.Show(this,L10n.Text("No matching regions were detected. You can still draw areas by hand."),L10n.Text("Redact Photo"));}catch(Exception error){MessageBox.Show(this,L10n.Text(error.Message),L10n.Text("Detection unavailable"));}
     }
     private void AnnotationStart()
     {

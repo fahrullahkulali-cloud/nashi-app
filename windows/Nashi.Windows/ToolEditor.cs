@@ -112,7 +112,7 @@ public sealed partial class ToolEditor:Window
         if(tool is not ("crop" or "cropVideo" or "redactVideo" or "redactImage" or "annotate"))return;
         drawing.Focus();origin=e.GetPosition(drawing);dragging=drawing.CaptureMouse();
         if(BeginCropGesture(origin)){e.Handled=true;return;}
-        if(tool=="annotate"){try{AnnotationStart();}catch(ArgumentException error){dragging=false;drawing.ReleaseMouseCapture();if(App.IsSmokeTest)throw;MessageBox.Show(this,error.Message,"Check drawing settings");}e.Handled=true;return;}
+        if(tool=="annotate"){try{AnnotationStart();}catch(ArgumentException error){dragging=false;drawing.ReleaseMouseCapture();if(App.IsSmokeTest)throw;MessageBox.Show(this,L10n.Text(error.Message),L10n.Text("Check drawing settings"));}e.Handled=true;return;}
         if(tool=="annotate"&&drawingTool.SelectedIndex==0){activeStroke=new Polyline{Stroke=new SolidColorBrush(Color.FromArgb(160,234,181,40)),StrokeThickness=Math.Max(3,drawing.Width/100),StrokeLineJoin=PenLineJoin.Round};activeStroke.Points.Add(origin);drawing.Children.Add(activeStroke);}
         else
         {
@@ -166,6 +166,6 @@ public sealed partial class ToolEditor:Window
             if(tool=="organizePDF")Pages=fields["Page numbers"].Text.Split(',',StringSplitOptions.RemoveEmptyEntries).Select(s=>int.Parse(s.Trim(),CultureInfo.InvariantCulture)).ToArray();
             DocumentOptions=new((int)Value("DPI",144),documentLayout.SelectedItem as string??"editable",epubLayout.SelectedItem as string??"reflowable",archivePassword.Password);if(accept)DialogResult=true;return true;
         }
-        catch(Exception error)when(error is ArgumentException or FormatException or OverflowException){if(App.IsSmokeTest)throw;MessageBox.Show(this,error.Message,"Check your settings",MessageBoxButton.OK,MessageBoxImage.Information);return false;}
+        catch(Exception error)when(error is ArgumentException or FormatException or OverflowException){if(App.IsSmokeTest)throw;MessageBox.Show(this,L10n.Text(error.Message),L10n.Text("Check your settings"),MessageBoxButton.OK,MessageBoxImage.Information);return false;}
     }
 }
