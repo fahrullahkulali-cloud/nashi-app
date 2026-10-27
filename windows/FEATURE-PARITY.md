@@ -27,6 +27,7 @@ Windows uses Explorer, Windows keyboard conventions and Windows Share. Apple Air
 
 - `dotnet run --project windows/Nashi.Verify -c Release` runs platform-independent engine/security tests; media tests require the explicit `NASHI_VERIFY_FFMPEG` / `NASHI_VERIFY_FFPROBE` paths or CI tool setup.
 - `Nashi --smoke-test` exercises a real isolated Windows desktop. Set `NASHI_SMOKE_DIRECTORY` for JSON, failure diagnostics, export fixtures and PNG render artifacts. Extended parity checks run on GitHub Actions.
+- `Nashi --smoke-test-interactions` runs the focused native Home/Library mouse, selected-file removal and keyboard/mouse conversion checks, including a JPG-to-PDF export; it writes `interactions.json` to `NASHI_SMOKE_DIRECTORY`.
 - `parity-progress.json` records the last completed assertion; `parity.json` and `smoke.json` are written only after their complete suites pass. Failure diagnostics must not be presented as a successful suite.
 - Native tests use Windows SendInput and OLE plus WPF render captures. They are not a physical Windows computer-use session or a claim that every third-party media site is always available.
 

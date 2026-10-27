@@ -15,6 +15,15 @@ public partial class App:Application
         }
         DispatcherUnhandledException+=(_,error)=>{var folder=Environment.GetEnvironmentVariable("NASHI_SMOKE_DIRECTORY");if(folder is not null){Directory.CreateDirectory(folder);File.WriteAllText(Path.Combine(folder,"dispatcher-error.txt"),error.Exception.ToString());error.Handled=true;Shutdown(1);}};
         base.OnStartup(e);
+        if(e.Args.Contains("--smoke-test-interactions"))
+        {
+            IsSmokeTest=true;ShutdownMode=ShutdownMode.OnExplicitShutdown;
+            var directory=Environment.GetEnvironmentVariable("NASHI_SMOKE_DIRECTORY")??Path.Combine(Path.GetTempPath(),"Nashi-Interactions-"+Guid.NewGuid().ToString("N"));Directory.CreateDirectory(directory);
+            var failures=new List<string>();var checks=0;
+            try{InteractionChecks.Run(directory,(passed,message)=>{checks++;if(!passed)failures.Add(message);});}
+            catch(Exception error){failures.Add(error.ToString());}
+            File.WriteAllText(Path.Combine(directory,"interactions.json"),System.Text.Json.JsonSerializer.Serialize(new{checks,failures}));Shutdown(failures.Count==0?0:1);return;
+        }
         if(e.Args.Contains("--ui-audit"))
         {
             IsSmokeTest=true;ShutdownMode=ShutdownMode.OnExplicitShutdown;
