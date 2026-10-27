@@ -35,7 +35,7 @@ internal sealed class WindowManagement:IDisposable
         var dispatcher=Dispatcher.CurrentDispatcher;
         callback=(handle,type,window,objectId,childId,thread,time)=>
         {
-            if(disposed||dispatcher.HasShutdownStarted)return;Native.GetCursorPos(out var point);var mouseDown=(Native.GetAsyncKeyState(1)&0x8000)!=0;var escapeDown=(Native.GetAsyncKeyState(0x1B)&0x8000)!=0;
+            if(disposed||dispatcher.HasShutdownStarted)return;Native.GetCursorPos(out var point);var mouseDown=PrimaryMouseButton.IsPressed;var escapeDown=(Native.GetAsyncKeyState(0x1B)&0x8000)!=0;
             // Native WinEvent callbacks can reenter window teardown. Return to
             // Windows before creating/closing WPF HWNDs; snapshot Escape now.
             dispatcher.BeginInvoke(DispatcherPriority.Input,()=>OnWindowEvent(handle,type,window,objectId,childId,thread,time,point,mouseDown,escapeDown));
